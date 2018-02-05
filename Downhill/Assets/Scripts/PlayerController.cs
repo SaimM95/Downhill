@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour {
 
 	// Controls speed of ball movement
 	public float speed;
+	public float forwardSpeed;
 
 	// Store reference to 'Rigid Body' component
 	private Rigidbody rigidBody;
@@ -16,10 +17,10 @@ public class PlayerController : MonoBehaviour {
 
 	void FixedUpdate () {
 		float moveH = Input.GetAxis ("Horizontal");
-		float moveV = Input.GetAxis ("Vertical");
+		//float moveV = Input.GetAxis ("Vertical");
 
 		// Apply vertical and horizontal forces to the rigid body
-		Vector3 movement = new Vector3 (moveH, 0.0f, moveV);
+		Vector3 movement = new Vector3 (moveH, 0.0f, forwardSpeed);
 		rigidBody.AddForce (movement * speed);
 		
 	}
