@@ -6,6 +6,7 @@ public class ObstacleGenerator : MonoBehaviour {
 
 	public int size = 2;
 	public GameObject player;
+	public Material CubeMaterial;
 
 	private string[] obstacleStructure = {"100", "001", "010", "111"};
 	private string[] allObstacleCombs = {"001","010","011","100","101","110","111"};
@@ -13,6 +14,9 @@ public class ObstacleGenerator : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//Fetch the Material from the Renderer of the GameObject
+		//Material = GetComponent<Renderer>().material;
+
 		foreach (string structure in obstacleStructure) {
 			createObstacle (structure);
 		}
@@ -59,6 +63,7 @@ public class ObstacleGenerator : MonoBehaviour {
 		Rigidbody rigidBody = cube.AddComponent<Rigidbody>();
 		rigidBody.mass = 100;
 		cube.transform.localScale = new Vector3 (size, size, size);
+		cube.GetComponent<Renderer>().material = CubeMaterial;
 		setObstaclePosition (p, cube, z);
 	}
 

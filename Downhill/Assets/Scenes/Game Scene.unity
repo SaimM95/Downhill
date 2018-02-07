@@ -380,6 +380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   size: 2
   player: {fileID: 1428062516}
+  CubeMaterial: {fileID: 2100000, guid: d9fdd2523e65a4acb9afa794caef6b60, type: 2}
 --- !u!4 &891647792
 Transform:
   m_ObjectHideFlags: 0
@@ -834,7 +835,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: d2f48957d468a436488fde2304610f01, type: 2}
+  - {fileID: 2100000, guid: f24ec929f82f2427993fd68789481c42, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
