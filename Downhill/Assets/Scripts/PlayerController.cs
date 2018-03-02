@@ -10,19 +10,23 @@ public class PlayerController : MonoBehaviour {
 	public float JumpForce = 7.0f;
 	public float Radius = 1.0f;
 
+	public LayerMask groundLayer;
+
 	private Rigidbody rigidBody;
 	private float verticalVelocity;
+	private float distanceToGround;
 
 	void Start () {
 		rigidBody = GetComponent<Rigidbody> ();
+		
 	}
 
 	void FixedUpdate () {
 		float moveH = Input.GetAxis ("Horizontal");
 
-		// Apply vertical force to simulate a jump
-		if (Input.GetKeyDown (KeyCode.Space) && isGrounded()) {
-			rigidBody.AddForce (new Vector3 (0, JumpForce, 0), ForceMode.Impulse);
+		// Jump when player presses "space" key
+		if (Input.GetKeyDown (KeyCode.Space)) {
+			jump ();
 		}
 
 		// Apply horizontal forces to the rigid body
@@ -30,7 +34,18 @@ public class PlayerController : MonoBehaviour {
 		rigidBody.AddForce (movement * Speed);
 	}
 
+	private void jump() {
+		if (isGrounded ()) {
+			// Apply vertical force to simulate a jump
+			rigidBody.AddForce (new Vector3 (0, JumpForce, 0), ForceMode.Impulse);
+		}
+	}
+
 	private bool isGrounded() {
-		return rigidBody.position.y <= Radius;
+		Vector3 position = transform.position;
+		Vector3 direction = Vector3.down;
+		float distance = 1.0f;
+
+		return Physics.Raycast(position, direction, distance, groundLayer);
 	}
 }
