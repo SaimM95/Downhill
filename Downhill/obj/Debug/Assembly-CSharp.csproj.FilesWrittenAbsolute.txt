@@ -45,3 +45,5 @@
 /Users/saimmalik/Google Drive/Fourth Year/CS 3GB3/a2/Downhill/Downhill/Temp/bin/Debug/Unity.Cecil.Mdb.dll
 /Users/saimmalik/Google Drive/Fourth Year/CS 3GB3/a2/Downhill/Downhill/Temp/bin/Debug/UnityEditor.iOS.Extensions.Xcode.dll
 /Users/saimmalik/Google Drive/Fourth Year/CS 3GB3/a2/Downhill/Downhill/Temp/bin/Debug/UnityEditor.iOS.Extensions.Xcode.xml
+/Users/saimmalik/Google Drive/Fourth Year/CS 3GB3/a2/Downhill/Downhill/Temp/bin/Debug/UnityEditor.WebGL.Extensions.dll
+/Users/saimmalik/Google Drive/Fourth Year/CS 3GB3/a2/Downhill/Downhill/Temp/bin/Debug/UnityEditor.WindowsStandalone.Extensions.dll

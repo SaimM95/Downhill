@@ -5,25 +5,22 @@ using UnityEngine;
 public class ObstacleGenerator : MonoBehaviour {
 
 	public int size = 2;
-	public GameObject player;
-	public Material CubeMaterial;
+	public GameObject GenerationPoint;
 
-	private string[] obstacleStructure = {"100", "001", "010", "111"};
+	private string[] obstacleStructure = {"010", "100", "001", "010", "111"};
 	private string[] allObstacleCombs = {"001","010","011","100","101","110","111"};
 	private int obstaclePosition = 0;
 
 	// Use this for initialization
 	void Start () {
-		//Fetch the Material from the Renderer of the GameObject
-		//Material = GetComponent<Renderer>().material;
-
 		foreach (string structure in obstacleStructure) {
 			createObstacle (structure);
 		}
 	}
 
 	void LateUpdate () {
-		float playerPosition = player.transform.position.z;
+		float playerPosition = transform.position.z;
+		float generationPoint = GenerationPoint.transform.position.z;
 
 		if (playerPosition > 100) {
 			if (playerPosition > obstaclePosition) {
@@ -32,7 +29,7 @@ public class ObstacleGenerator : MonoBehaviour {
 			return;
 		}
 
-		if (playerPosition > obstaclePosition - 20) {
+		if (generationPoint > obstaclePosition) {
 			obstaclePosition += 10;
 			generateRandomObstacle ();
 		}
@@ -48,26 +45,23 @@ public class ObstacleGenerator : MonoBehaviour {
 		char[] chars = structure.ToCharArray ();
 
 		if (chars [0] == '1') {
-			createCubeAtPosition ('L', obstaclePosition);
+			createObstacleAtPosition ('L');
 		} 
 		if (chars [1] == '1') {
-			createCubeAtPosition ('M', obstaclePosition);
+			createObstacleAtPosition ('M');
 		}
 		if (chars [2] == '1') {
-			createCubeAtPosition ('R', obstaclePosition);
+			createObstacleAtPosition ('R');
 		}
 	}
 
-	private void createCubeAtPosition(char p, int z) {
-		GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		Rigidbody rigidBody = cube.AddComponent<Rigidbody>();
-		rigidBody.mass = 100;
-		cube.transform.localScale = new Vector3 (size, size, size);
-		cube.GetComponent<Renderer>().material = CubeMaterial;
-		setObstaclePosition (p, cube, z);
+	private void createObstacleAtPosition(char p) {
+		Vector3 position = new Vector3 (getObstacleX(p), 1, obstaclePosition);
+		GameObject obstacle = (GameObject) Resources.Load ("Obstacle");
+		Instantiate (obstacle, position, obstacle.transform.rotation);
 	}
 
-	private void setObstaclePosition(char p, GameObject cube, int z) {
+	private float getObstacleX(char p) {
 		float x;
 		if (p == 'L')
 			x = 0 - size - 1;
@@ -75,7 +69,7 @@ public class ObstacleGenerator : MonoBehaviour {
 			x = 0 + size + 1;
 		else
 			x = 0;
-
-		cube.transform.position = new Vector3(x, 1, z);
+		
+		return x;
 	}
 }
