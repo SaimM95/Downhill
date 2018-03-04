@@ -142,6 +142,34 @@ Transform:
   m_Father: {fileID: 480048501}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
+--- !u!1 &149004565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 149004566}
+  m_Layer: 0
+  m_Name: GroundGenerationPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &149004566
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 149004565}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 300}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1192974514}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &421022276
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,6 +206,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 480048501}
+  - component: {fileID: 480048502}
   m_Layer: 0
   m_Name: Ground and Walls
   m_TagString: Untagged
@@ -193,14 +222,28 @@ Transform:
   m_GameObject: {fileID: 480048500}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 20}
+  m_LocalScale: {x: 1, y: 1, z: 100}
   m_Children:
   - {fileID: 526207191}
   - {fileID: 1416304517}
   - {fileID: 55207335}
+  - {fileID: 1701011365}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &480048502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 480048500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69674a8c0068f4060a23acd92775d36d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GenerationPoint: {fileID: 149004565}
+  MoveDistance: 500
 --- !u!1 &526207190
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +252,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 526207191}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,7 +391,7 @@ GameObject:
   - component: {fileID: 991880443}
   - component: {fileID: 991880442}
   - component: {fileID: 991880441}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ground Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -477,6 +520,7 @@ Transform:
   m_Children:
   - {fileID: 421022277}
   - {fileID: 1517453585}
+  - {fileID: 149004566}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -700,7 +744,6 @@ GameObject:
   - component: {fileID: 1428062519}
   - component: {fileID: 1428062518}
   - component: {fileID: 1428062517}
-  - component: {fileID: 1428062523}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -723,6 +766,9 @@ MonoBehaviour:
   ForwardSpeed: 1
   JumpForce: 7
   Radius: 1
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!54 &1428062518
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -804,19 +850,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1428062523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1428062516}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc8a15a17e7dd4457ac54695f5fc43b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  size: 2
-  GenerationPoint: {fileID: 421022276}
 --- !u!1 &1517453584
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,3 +962,31 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1569779092}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1701011364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1701011365}
+  m_Layer: 0
+  m_Name: EdgePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1701011365
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1701011364}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 480048501}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
