@@ -22,12 +22,12 @@ public class ObstacleGenerator : MonoBehaviour {
 		float playerPosition = transform.position.z;
 		float generationPoint = GenerationPoint.transform.position.z;
 
-		if (playerPosition > 100) {
-			if (playerPosition > obstaclePosition) {
-				Debug.Log ("<color=yellow>Game Over!</color>");
-			}
-			return;
-		}
+//		if (playerPosition > 100) {
+//			if (playerPosition > obstaclePosition) {
+//				Debug.Log ("<color=yellow>Game Over!</color>");
+//			}
+//			return;
+//		}
 
 		if (generationPoint > obstaclePosition) {
 			obstaclePosition += 10;

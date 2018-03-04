@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\CameraController.cs" />
+     <Compile Include="Assets\Scripts\GroundGenerator.cs" />
      <Compile Include="Assets\Scripts\ObstacleDestructor.cs" />
      <Compile Include="Assets\Scripts\ObstacleGenerator.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
