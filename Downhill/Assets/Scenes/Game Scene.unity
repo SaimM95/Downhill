@@ -365,7 +365,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc8a15a17e7dd4457ac54695f5fc43b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 2
+  ObstacleSize: 2
+  CheckPointDistance: 20
   GenerationPoint: {fileID: 421022276}
 --- !u!4 &891647792
 Transform:
@@ -494,7 +495,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc8a15a17e7dd4457ac54695f5fc43b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 2
+  ObstacleSize: 2
+  CheckPointDistance: 1000
   GenerationPoint: {fileID: 421022276}
 --- !u!114 &1192974513
 MonoBehaviour:
