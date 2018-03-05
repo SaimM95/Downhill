@@ -13,7 +13,6 @@ public class PlayerFollower : MonoBehaviour {
 	
 	// Update is called once per frame
 	void LateUpdate () {
-		float playerZ = player.transform.position.z;
-		transform.position = new Vector3(transform.position.x, transform.position.y, playerZ);
+		transform.position = player.transform.position;
 	}
 }

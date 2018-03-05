@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
+	public GameObject Player;
+
 	public Text ScoreText;
 	public Text TimeText;
 	public Text CheckpointText;
+	public Text GameOverText;
 
 	private string[] InitialObstacleStructure = {"010", "100", "001", "010", "111"};
 	private string[] AllObstacleCombs = {"001","010","011","100","101","110","111"};
@@ -55,10 +58,17 @@ public class GameController : MonoBehaviour {
 			int newObstaclePosition = obstacleRowsGenerated * ObstacleDistance;
 			createObstacle (structure, newObstaclePosition);
 		}
+
 		CheckpointText.enabled = false;
+		GameOverText.enabled = false;
 	}
 
 	void LateUpdate () {
+		if (isGameOver ()) {
+			gameOver ();
+			return;
+		}
+
 		float playerPosition = transform.position.z;
 		float checkPostGenerationPoint = playerPosition + CheckPostGenerationPointGap;
 		float obstacleGenerationPoint = playerPosition + ObstacleGenerationPointGap;
@@ -80,7 +90,18 @@ public class GameController : MonoBehaviour {
 			showCheckPointText ();
 		}
 	}
+		
+	private void gameOver() {
+		PlayerController playerController = Player.GetComponent<PlayerController> ();
+		playerController.gameOver = true;
+		GameOverText.enabled = true;
+	}
 
+	private bool isGameOver() {
+		return timeLeft <= 0 || isPlayerBelowGround();
+	}
+
+	// update the score based on level and rows counters
 	private void updateScore(float playerPosition) {
 		if (playerPosition >= nextCheckpointPos) {
 			levelUp ();
@@ -173,5 +194,10 @@ public class GameController : MonoBehaviour {
 			x = 0;
 
 		return x;
+	}
+
+	private bool isPlayerBelowGround() {
+		float playerY = transform.position.y;
+		return playerY <= 0;
 	}
 }

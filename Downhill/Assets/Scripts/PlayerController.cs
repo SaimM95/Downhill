@@ -16,12 +16,19 @@ public class PlayerController : MonoBehaviour {
 	private float verticalVelocity;
 	private float distanceToGround;
 
+	public bool gameOver = false;
+
 	void Start () {
 		rigidBody = GetComponent<Rigidbody> ();
-		
 	}
 
 	void FixedUpdate () {
+		if (gameOver) {
+			// stop player from moving when game over
+			rigidBody.velocity = Vector3.zero;
+			return;
+		}
+
 		float moveH = Input.GetAxis ("Horizontal");
 
 		// Jump when player presses "space" key
