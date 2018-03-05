@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObstacleGenerator : MonoBehaviour {
+public class GameController : MonoBehaviour {
 
 	private string[] InitialObstacleStructure = {"010", "100", "001", "010", "111"};
 	private string[] AllObstacleCombs = {"001","010","011","100","101","110","111"};
@@ -11,13 +11,18 @@ public class ObstacleGenerator : MonoBehaviour {
 	private const int ObstacleGenerationPointGap = 50;
 	private const int ObstacleSize = 2;
 	private const int ObstacleDistance = 20;
-	private int obstacleRowsGenerated = 1;
 
 	// distance in front of the player for checkpost generation
 	private const int CheckPostGenerationPointGap = 300;
 	private const int CheckPointDistance = 500;
+
+	// number of seconds to complete each level
+	private const int LevelTime = 30;
+
+	private int obstacleRowsGenerated = 1;
 	private int checkpointsGenerated = 1;
 
+	// values to keep track of the position of the next checkpoint/row relative to the player
 	private int nextCheckpointPos = CheckPointDistance;
 	private int nextObstacleRowPos = ObstacleDistance;
 
@@ -27,6 +32,8 @@ public class ObstacleGenerator : MonoBehaviour {
 	private int row = 0;
 
 	private int score = 0;
+	private float timer = 0.0f;
+	private int timeLeft = LevelTime;
 
 	// Use this for initialization
 	void Start () {
@@ -51,8 +58,13 @@ public class ObstacleGenerator : MonoBehaviour {
 			generateRandomObstacle (newObstaclePosition);
 		}
 
+		updateScore (playerPosition);
+		updateTime ();
+	}
+
+	private void updateScore(float playerPosition) {
 		if (playerPosition >= nextCheckpointPos) {
-			level++;
+			levelUp ();
 			nextCheckpointPos += CheckPointDistance;
 		}
 
@@ -64,6 +76,19 @@ public class ObstacleGenerator : MonoBehaviour {
 		score = (level * 100) + row;
 
 		Debug.Log("Level:" + level + " Row:" + row + " Score:" + score);
+	}
+
+	private void updateTime() {
+		timer += Time.deltaTime;
+		int seconds = (int) timer % 60;
+		timeLeft = LevelTime - seconds;
+		Debug.Log ("Time Left:" + timeLeft);
+	}
+
+	private void levelUp() {
+		level++;
+		timer = 0;
+		timeLeft = LevelTime;
 	}
 
 	private void createCheckpostAtPosition(int posZ) {
@@ -108,7 +133,7 @@ public class ObstacleGenerator : MonoBehaviour {
 			x = 0 + ObstacleSize + 1;
 		else
 			x = 0;
-		
+
 		return x;
 	}
 }

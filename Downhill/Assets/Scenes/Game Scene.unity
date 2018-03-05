@@ -338,49 +338,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -300, y: 0, z: 0}
---- !u!1 &891647790
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 891647792}
-  - component: {fileID: 891647791}
-  m_Layer: 0
-  m_Name: ObstacleGeneration
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &891647791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 891647790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc8a15a17e7dd4457ac54695f5fc43b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObstacleSize: 2
-  CheckPointDistance: 20
-  GenerationPoint: {fileID: 421022276}
---- !u!4 &891647792
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 891647790}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &991880440
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,12 +449,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1192974511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc8a15a17e7dd4457ac54695f5fc43b6, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f50705b73e584af09602636b5303b81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObstacleSize: 2
-  CheckPointDistance: 1000
-  GenerationPoint: {fileID: 421022276}
 --- !u!114 &1192974513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -524,7 +478,7 @@ Transform:
   - {fileID: 1517453585}
   - {fileID: 149004566}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1263209573
 GameObject:
