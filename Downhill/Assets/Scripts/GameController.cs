@@ -22,10 +22,13 @@ public class GameController : MonoBehaviour {
 	private const int CheckPointDistance = 500;
 
 	// number of seconds to complete each level
-	private const int LevelTime = 30;
+	private const int LevelTime = 40;
 
 	// number of seconds to display the "Checkpoint!" text for
 	private const int CheckPointDisplayTime = 2;
+
+	// height that obstacles spawn at (and then drop)
+	private const int ObstacleDropHeight = 10;
 
 	private int obstacleRowsGenerated = 1;
 	private int checkpointsGenerated = 1;
@@ -156,7 +159,7 @@ public class GameController : MonoBehaviour {
 
 	private void createObstacleAtPosition(char p, int posZ) {
 		GameObject obstacle = (GameObject) Resources.Load ("Obstacle");
-		Vector3 position = new Vector3 (getObstacleX(p), 1, posZ);
+		Vector3 position = new Vector3 (getObstacleX(p), ObstacleDropHeight, posZ);
 		Instantiate (obstacle, position, obstacle.transform.rotation);
 	}
 
