@@ -1,8 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
+
+	public Text ScoreText;
+	public Text TimeText;
+	public Text CheckpointText;
 
 	private string[] InitialObstacleStructure = {"010", "100", "001", "010", "111"};
 	private string[] AllObstacleCombs = {"001","010","011","100","101","110","111"};
@@ -18,6 +23,9 @@ public class GameController : MonoBehaviour {
 
 	// number of seconds to complete each level
 	private const int LevelTime = 30;
+
+	// number of seconds to display the "Checkpoint!" text for
+	private const int CheckPointDisplayTime = 2;
 
 	private int obstacleRowsGenerated = 1;
 	private int checkpointsGenerated = 1;
@@ -35,12 +43,16 @@ public class GameController : MonoBehaviour {
 	private float timer = 0.0f;
 	private int timeLeft = LevelTime;
 
+	private float checkPointTextTimer = 0.0f;
+	private bool displayCheckpointText = false;
+
 	// Use this for initialization
 	void Start () {
 		foreach (string structure in InitialObstacleStructure) {
 			int newObstaclePosition = obstacleRowsGenerated * ObstacleDistance;
 			createObstacle (structure, newObstaclePosition);
 		}
+		CheckpointText.enabled = false;
 	}
 
 	void LateUpdate () {
@@ -60,6 +72,10 @@ public class GameController : MonoBehaviour {
 
 		updateScore (playerPosition);
 		updateTime ();
+
+		if (displayCheckpointText) {
+			showCheckPointText ();
+		}
 	}
 
 	private void updateScore(float playerPosition) {
@@ -74,21 +90,40 @@ public class GameController : MonoBehaviour {
 		}
 
 		score = (level * 100) + row;
-
-		Debug.Log("Level:" + level + " Row:" + row + " Score:" + score);
+		ScoreText.text = "Score\n" + score.ToString ();
 	}
 
 	private void updateTime() {
 		timer += Time.deltaTime;
 		int seconds = (int) timer % 60;
 		timeLeft = LevelTime - seconds;
-		Debug.Log ("Time Left:" + timeLeft);
+		TimeText.text = "Time\n" + timeLeft.ToString ();
+
+		if (timeLeft <= 10) {
+			TimeText.color = Color.red;
+		} else {
+			TimeText.color = Color.green;
+		}
 	}
 
 	private void levelUp() {
 		level++;
 		timer = 0;
 		timeLeft = LevelTime;
+		displayCheckpointText = true;
+	}
+
+	// display checkpoint text for X amount of seconds and then disable it
+	private void showCheckPointText() {
+		checkPointTextTimer += Time.deltaTime;
+		int seconds = (int)checkPointTextTimer % 60;
+		CheckpointText.enabled = true;
+
+		if (seconds >= CheckPointDisplayTime) {
+			checkPointTextTimer = 0;
+			CheckpointText.enabled = false;
+			displayCheckpointText = false;
+		}
 	}
 
 	private void createCheckpostAtPosition(int posZ) {
