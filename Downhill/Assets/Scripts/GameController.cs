@@ -65,7 +65,7 @@ public class GameController : MonoBehaviour {
 		playerController = Player.GetComponent<PlayerController> ();
 		groundGenerator = Ground.GetComponent<GroundGenerator> ();
 
-		initInitialStructure ();
+		createInitialStructure ();
 
 		CheckpointText.enabled = false;
 		GameOverText.enabled = false;
@@ -224,7 +224,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void generateRandomObstacle(int posZ) {
-		int rand = (int) Random.Range (0, 6);
+		int rand = (int) Random.Range (0, AllObstacleCombs.Length);
 		createObstacle (AllObstacleCombs[rand], posZ);
 	}
 
