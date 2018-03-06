@@ -11,18 +11,27 @@ public class PlayerController : MonoBehaviour {
 	public float Radius = 1.0f;
 
 	public LayerMask groundLayer;
+	public bool gameOver = false;
+	public bool resetting;
 
 	private Rigidbody rigidBody;
 	private float verticalVelocity;
 	private float distanceToGround;
 
-	public bool gameOver = false;
+	// stores initial position of player for game resetting purposes
+	private Vector3 initialPosition;
 
 	void Start () {
 		rigidBody = GetComponent<Rigidbody> ();
+		initialPosition = transform.position;
 	}
 
 	void FixedUpdate () {
+		if (resetting) {
+			resetting = false;
+			return;
+		}
+			
 		if (gameOver) {
 			// stop player from moving when game over
 			rigidBody.velocity = Vector3.zero;
@@ -39,6 +48,12 @@ public class PlayerController : MonoBehaviour {
 		// Apply horizontal forces to the rigid body
 		Vector3 movement = new Vector3 (moveH, 0.0f, ForwardSpeed);
 		rigidBody.AddForce (movement * Speed);
+	}
+
+	public void reset() {
+		resetting = true;
+		transform.position = initialPosition;
+		gameOver = false;
 	}
 
 	private void jump() {

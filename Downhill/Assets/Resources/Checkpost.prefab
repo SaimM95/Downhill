@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114310794029970892}
   m_Layer: 0
   m_Name: Checkpost
-  m_TagString: Untagged
+  m_TagString: Checkpost
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

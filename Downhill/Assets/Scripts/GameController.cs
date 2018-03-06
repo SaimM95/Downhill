@@ -6,26 +6,28 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour {
 
 	public GameObject Player;
+	public GameObject Ground;
 
 	public Text ScoreText;
 	public Text TimeText;
 	public Text CheckpointText;
 	public Text GameOverText;
+	public Button PlayAgainButton;
 
 	private string[] InitialObstacleStructure = {"010", "100", "001", "010", "111"};
 	private string[] AllObstacleCombs = {"001","010","011","100","101","110","111"};
 
-	// distance in front of the player for obstacle generation
+	// look ahead distance in front of the player for obstacle generation
 	private const int ObstacleGenerationPointGap = 50;
 	private const int ObstacleSize = 2;
 	private const int ObstacleDistance = 20;
 
-	// distance in front of the player for checkpost generation
+	// look ahead distance in front of the player for checkpost generation
 	private const int CheckPostGenerationPointGap = 300;
 	private const int CheckPointDistance = 500;
 
 	// number of seconds to complete each level
-	private const int LevelTime = 40;
+	private const int LevelTime = 35;
 
 	// number of seconds to display the "Checkpoint!" text for
 	private const int CheckPointDisplayTime = 2;
@@ -52,22 +54,35 @@ public class GameController : MonoBehaviour {
 	private float checkPointTextTimer = 0.0f;
 	private bool displayCheckpointText = false;
 
+	private bool resetting = false;
+	private bool over = false;
+
+	private PlayerController playerController;
+	private GroundGenerator groundGenerator;
+
 	// Use this for initialization
 	void Start () {
-		foreach (string structure in InitialObstacleStructure) {
-			int newObstaclePosition = obstacleRowsGenerated * ObstacleDistance;
-			createObstacle (structure, newObstaclePosition);
-		}
+		playerController = Player.GetComponent<PlayerController> ();
+		groundGenerator = Ground.GetComponent<GroundGenerator> ();
+
+		initInitialStructure ();
 
 		CheckpointText.enabled = false;
 		GameOverText.enabled = false;
+		PlayAgainButton.gameObject.SetActive(false);
 	}
 
 	void LateUpdate () {
+		if (isResetting()) {
+			return;
+		}
+
 		if (isGameOver ()) {
 			gameOver ();
 			return;
 		}
+
+		over = false;
 
 		float playerPosition = transform.position.z;
 		float checkPostGenerationPoint = playerPosition + CheckPostGenerationPointGap;
@@ -90,11 +105,62 @@ public class GameController : MonoBehaviour {
 			showCheckPointText ();
 		}
 	}
+
+	public void resetGame() {
+		resetting = true;
+
+		// reset timers
+		timer = 0;
+		checkPointTextTimer = 0;
+		timeLeft = LevelTime;
+
+		// reset score
+		level = 0;
+		row = 0;
+		score = 0;
+
+		// reset counters
+		obstacleRowsGenerated = 1;
+		checkpointsGenerated = 1;
+		nextCheckpointPos = CheckPointDistance;
+		nextObstacleRowPos = ObstacleDistance;
+
+		// reset game objects
+		groundGenerator.reset ();
+		playerController.reset ();
+
+		// reset UI
+		CheckpointText.enabled = false;
+		GameOverText.enabled = false;
+		PlayAgainButton.gameObject.SetActive(false);
+
+		destroyExistingObjects ();
+		createInitialStructure ();
+
+		resetting = false;
+	}
+
+	private bool isResetting() {
+		return resetting || playerController.resetting || groundGenerator.resetting;
+	}
+
+	private void createInitialStructure() {
+		foreach (string structure in InitialObstacleStructure) {
+			int newObstaclePosition = obstacleRowsGenerated * ObstacleDistance;
+			createObstacle (structure, newObstaclePosition);
+		}
+	}
 		
 	private void gameOver() {
-		PlayerController playerController = Player.GetComponent<PlayerController> ();
+		if (over) {
+			return;
+		}
+
+		CheckpointText.enabled = false;
 		playerController.gameOver = true;
 		GameOverText.enabled = true;
+		PlayAgainButton.gameObject.SetActive(true);
+		over = true;
 	}
 
 	private bool isGameOver() {
@@ -199,5 +265,17 @@ public class GameController : MonoBehaviour {
 	private bool isPlayerBelowGround() {
 		float playerY = transform.position.y;
 		return playerY <= 0;
+	}
+
+	private void destroyExistingObjects() {
+		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+		foreach (GameObject obstacle in obstacles) {
+			Destroy(obstacle);
+		}
+
+		GameObject[] checkposts = GameObject.FindGameObjectsWithTag("Checkpost");
+		foreach (GameObject checkpost in checkposts) {
+			Destroy(checkpost);
+		}
 	}
 }
