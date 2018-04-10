@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour {
 
 	private Rigidbody rigidBody;
 	private float verticalVelocity;
-	private float distanceToGround;
 
 	// stores initial position of player for game resetting purposes
 	private Vector3 initialPosition;
@@ -57,6 +56,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void jump() {
+		Debug.Log ("isgrounded:" + isGrounded ());
 		if (isGrounded ()) {
 			// Apply vertical force to simulate a jump
 			rigidBody.AddForce (new Vector3 (0, JumpForce, 0), ForceMode.Impulse);

@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour {
 
 	// look ahead distance in front of the player for checkpost generation
 	private const int CheckPostGenerationPointGap = 300;
-	private const int CheckPointDistance = 100;//500;
+	private const int CheckPointDistance = 400;
 
 	// number of seconds to complete each level
 	private const int LevelTime = 35;
