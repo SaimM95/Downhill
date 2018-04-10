@@ -12,10 +12,13 @@ public class GameController : MonoBehaviour {
 	public Text TimeText;
 	public Text CheckpointText;
 	public Text GameOverText;
+	public Text DifficultyText;
 	public Button PlayAgainButton;
 
 	private string[] InitialObstacleStructure = {"010", "100", "001", "010", "111"};
-	private string[] AllObstacleCombs = {"001","010","011","100","101","110","111"};
+	private string[] EasyObstacleCombs = {"001","010","011","100","101","110","111"};
+	private string[] MediumObstacleCombs = {"001","010","011","100","101","110","111","111","111"};
+	private string[] HardObstacleCombs = {"001","010","011","100","101","110","111","111","111","111","111"};
 
 	// look ahead distance in front of the player for obstacle generation
 	private const int ObstacleGenerationPointGap = 50;
@@ -24,7 +27,7 @@ public class GameController : MonoBehaviour {
 
 	// look ahead distance in front of the player for checkpost generation
 	private const int CheckPostGenerationPointGap = 300;
-	private const int CheckPointDistance = 500;
+	private const int CheckPointDistance = 100;//500;
 
 	// number of seconds to complete each level
 	private const int LevelTime = 35;
@@ -34,6 +37,13 @@ public class GameController : MonoBehaviour {
 
 	// height that obstacles spawn at (and then drop)
 	private const int ObstacleDropHeight = 10;
+
+	// Difficulty levels
+	private const int EASY = 0, MEDIUM = 1, HARD = 2;
+	// Number of levels after the difficulty increases
+	private const int DIFFICULTY_MULT = 2;
+
+	private int difficulty = EASY;
 
 	private int obstacleRowsGenerated = 1;
 	private int checkpointsGenerated = 1;
@@ -70,6 +80,8 @@ public class GameController : MonoBehaviour {
 		CheckpointText.enabled = false;
 		GameOverText.enabled = false;
 		PlayAgainButton.gameObject.SetActive(false);
+		DifficultyText.text = "Difficulty: Easy";
+		DifficultyText.color = Color.green;
 	}
 
 	void LateUpdate () {
@@ -201,6 +213,30 @@ public class GameController : MonoBehaviour {
 		timer = 0;
 		timeLeft = LevelTime;
 		displayCheckpointText = true;
+		updateDifficulty ();
+	}
+
+	private void updateDifficulty() {
+		Debug.Log ("update difficulty");
+
+		if (level > 0 && level % DIFFICULTY_MULT == 0) {
+			if (difficulty == EASY) {
+				difficulty = MEDIUM;
+			} else if (difficulty == MEDIUM) {
+				difficulty = HARD;
+			}
+		}
+
+		if (difficulty == EASY) {
+			DifficultyText.text = "Difficulty: Easy";
+			DifficultyText.color = Color.green;
+		} else if (difficulty == MEDIUM) {
+			DifficultyText.text = "Difficulty: Medium";
+			DifficultyText.color = Color.blue;
+		} else {
+			DifficultyText.text = "Difficulty: Hard";
+			DifficultyText.color = Color.red;
+		}
 	}
 
 	// display checkpoint text for X amount of seconds and then disable it
@@ -224,8 +260,16 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void generateRandomObstacle(int posZ) {
-		int rand = (int) Random.Range (0, AllObstacleCombs.Length);
-		createObstacle (AllObstacleCombs[rand], posZ);
+		if (difficulty == EASY) {
+			int rand = (int)Random.Range (0, EasyObstacleCombs.Length);
+			createObstacle (EasyObstacleCombs [rand], posZ);
+		} else if (difficulty == MEDIUM) {
+			int rand = (int)Random.Range (0, MediumObstacleCombs.Length);
+			createObstacle (MediumObstacleCombs [rand], posZ);
+		} else {
+			int rand = (int)Random.Range (0, HardObstacleCombs.Length);
+			createObstacle (HardObstacleCombs [rand], posZ);
+		}
 	}
 
 	private void createObstacle (string structure, int posZ) {
