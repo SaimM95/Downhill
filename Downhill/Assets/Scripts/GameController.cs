@@ -9,11 +9,13 @@ public class GameController : MonoBehaviour {
 	public GameObject Ground;
 
 	public Text ScoreText;
+	public Text HiscoreText;
 	public Text TimeText;
 	public Text CheckpointText;
 	public Text GameOverText;
 	public Text DifficultyText;
 	public Button PlayAgainButton;
+	public RawImage HiScoreImage;
 
 	private string[] InitialObstacleStructure = {"010", "100", "001", "010", "111"};
 	private string[] EasyObstacleCombs = {"001","010","011","100","101","110","111"};
@@ -45,7 +47,10 @@ public class GameController : MonoBehaviour {
 	// Number of levels after the difficulty increases
 	private const int DIFFICULTY_MULT = 2;
 
+	private const string KEY_HISCORE = "hiscore";
+
 	private int difficulty = EASY;
+	private int hiscore = 0;
 
 	private int obstacleRowsGenerated = 1;
 	private int checkpointsGenerated = 1;
@@ -77,11 +82,13 @@ public class GameController : MonoBehaviour {
 		playerController = Player.GetComponent<PlayerController> ();
 		groundGenerator = Ground.GetComponent<GroundGenerator> ();
 
+		hiscore = loadHiScore ();
 		createInitialStructure ();
 
 		CheckpointText.enabled = false;
 		GameOverText.enabled = false;
 		PlayAgainButton.gameObject.SetActive(false);
+		HiScoreImage.enabled = false;
 		DifficultyText.text = "Difficulty: Easy";
 		DifficultyText.color = Color.green;
 	}
@@ -146,6 +153,7 @@ public class GameController : MonoBehaviour {
 		// reset UI
 		CheckpointText.enabled = false;
 		GameOverText.enabled = false;
+		HiScoreImage.enabled = false;
 		PlayAgainButton.gameObject.SetActive(false);
 
 		destroyExistingObjects ();
@@ -176,10 +184,36 @@ public class GameController : MonoBehaviour {
 		GameOverText.enabled = true;
 		PlayAgainButton.gameObject.SetActive(true);
 		over = true;
+
+		saveHiScore ();
 	}
 
 	private bool isGameOver() {
 		return timeLeft <= 0 || isPlayerBelowGround();
+	}
+
+	private int loadHiScore() {
+		if (PlayerPrefs.HasKey(KEY_HISCORE)) {
+			return PlayerPrefs.GetInt (KEY_HISCORE);
+		}
+		return 0;
+	}
+
+	private void updateHiScore() {
+		if (score > hiscore) {
+			hiscore = score;
+		}
+		HiscoreText.text = "High Score\n" + hiscore.ToString();
+	}
+
+	private void saveHiScore() {
+		int prevHiScore = loadHiScore();
+
+		if (prevHiScore < hiscore) {
+			PlayerPrefs.SetInt (KEY_HISCORE, hiscore);
+			Debug.Log ("High score:" + hiscore.ToString () + " saved");
+			HiScoreImage.enabled = true;
+		}
 	}
 
 	// update the score based on level and rows counters
@@ -196,6 +230,8 @@ public class GameController : MonoBehaviour {
 
 		score = (level * 100) + row;
 		ScoreText.text = "Score\n" + score.ToString ();
+
+		updateHiScore ();
 	}
 
 	private void updateTime() {
