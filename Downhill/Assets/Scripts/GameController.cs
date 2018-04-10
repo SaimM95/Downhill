@@ -19,6 +19,8 @@ public class GameController : MonoBehaviour {
 	private string[] EasyObstacleCombs = {"001","010","011","100","101","110","111"};
 	private string[] MediumObstacleCombs = {"001","010","011","100","101","110","111","111","111"};
 	private string[] HardObstacleCombs = {"001","010","011","100","101","110","111","111","111","111","111"};
+	private string[] SpecialObstacleCombs = { "101300","110300","011300","111200","111020", "110200", "011020",
+												"111001", "111100", "101101", "010010", "111101"};
 
 	// look ahead distance in front of the player for obstacle generation
 	private const int ObstacleGenerationPointGap = 50;
@@ -160,6 +162,7 @@ public class GameController : MonoBehaviour {
 		foreach (string structure in InitialObstacleStructure) {
 			int newObstaclePosition = obstacleRowsGenerated * ObstacleDistance;
 			createObstacle (structure, newObstaclePosition);
+			obstacleRowsGenerated++;
 		}
 	}
 		
@@ -260,6 +263,14 @@ public class GameController : MonoBehaviour {
 	}
 
 	private void generateRandomObstacle(int posZ) {
+		obstacleRowsGenerated++;
+
+		if (isSpecial ()) {
+			int rand = (int)Random.Range (0, SpecialObstacleCombs.Length);
+			createSpecialObstacle (SpecialObstacleCombs [rand], posZ);
+			return;
+		}
+
 		if (difficulty == EASY) {
 			int rand = (int)Random.Range (0, EasyObstacleCombs.Length);
 			createObstacle (EasyObstacleCombs [rand], posZ);
@@ -270,27 +281,82 @@ public class GameController : MonoBehaviour {
 			int rand = (int)Random.Range (0, HardObstacleCombs.Length);
 			createObstacle (HardObstacleCombs [rand], posZ);
 		}
+			
+	}
+
+	private bool isSpecial() {
+		int spec = (int)Random.Range (1, 11); // random from 1-10
+		if (difficulty == EASY) {
+			return spec == 1;
+		} else if (difficulty == MEDIUM) {
+			return spec <= 3;
+		} else {
+			return spec <= 5;
+		}
 	}
 
 	private void createObstacle (string structure, int posZ) {
+		createObstacle (structure, posZ, 1);
+	}
+
+	private void createObstacle (string structure, int posZ, int row) {
 		char[] chars = structure.ToCharArray ();
 
 		if (chars [0] == '1') {
-			createObstacleAtPosition ('L', posZ);
+			createObstacleAtPosition ('L', posZ, row);
 		} 
 		if (chars [1] == '1') {
-			createObstacleAtPosition ('M', posZ);
+			createObstacleAtPosition ('M', posZ, row);
 		}
 		if (chars [2] == '1') {
-			createObstacleAtPosition ('R', posZ);
+			createObstacleAtPosition ('R', posZ, row);
+		}
+	}
+
+	private void createSpecialObstacle(string structure, int posZ) {
+		// Create bottom row
+		createObstacle (structure, posZ);
+
+		// Create top row
+		char[] chars = structure.ToCharArray ();
+		if (chars [3] == '3') {
+			createSpan3ObstacleAtPosition (posZ);
+		} else if (chars [3] == '2') {
+			createSpan2ObstacleAtPosition ('L', posZ);
 		}
 
-		obstacleRowsGenerated++;
+		if (chars [4] == '2') {
+			createSpan2ObstacleAtPosition ('R', posZ);
+		}
+
+		// If top row is just regular obstacles
+		if (chars [3] == '1' || chars [4] == '1' || chars [5] == '1') {
+			createObstacle (new string(chars,3,3) , posZ, 2);
+		}
 	}
 
 	private void createObstacleAtPosition(char p, int posZ) {
+		createObstacleAtPosition (p, posZ, 1);
+	}
+
+	private void createObstacleAtPosition(char p, int posZ, int row) {
 		GameObject obstacle = (GameObject) Resources.Load ("Obstacle");
-		Vector3 position = new Vector3 (getObstacleX(p), ObstacleDropHeight, posZ);
+		float dropHeight = (row == 2) ? (float) (ObstacleDropHeight + 2.5) : (float) ObstacleDropHeight;
+		Vector3 position = new Vector3 (getObstacleX(p), dropHeight, posZ);
+		Instantiate (obstacle, position, obstacle.transform.rotation);
+	}
+
+	private void createSpan2ObstacleAtPosition(char p, int posZ) {
+		Debug.Log ("creating span2");
+		GameObject obstacle = (GameObject) Resources.Load ("ObstacleSpan2");
+		float x = p == 'L' ? (float) -1.5 : (float) 1.5;
+		Vector3 position = new Vector3 (x, ObstacleDropHeight + 3, posZ);
+		Instantiate (obstacle, position, obstacle.transform.rotation);
+	}
+
+	private void createSpan3ObstacleAtPosition(int posZ) {
+		GameObject obstacle = (GameObject) Resources.Load ("ObstacleSpan3");
+		Vector3 position = new Vector3 (0, ObstacleDropHeight + 3, posZ);
 		Instantiate (obstacle, position, obstacle.transform.rotation);
 	}
 
