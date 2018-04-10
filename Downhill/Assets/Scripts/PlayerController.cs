@@ -60,6 +60,9 @@ public class PlayerController : MonoBehaviour {
 		if (isGrounded ()) {
 			// Apply vertical force to simulate a jump
 			rigidBody.AddForce (new Vector3 (0, JumpForce, 0), ForceMode.Impulse);
+
+			// Play jump sound
+			SoundManagerScript.PlayJumpSound();
 		}
 	}
 
